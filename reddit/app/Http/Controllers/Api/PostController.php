@@ -16,12 +16,12 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'title' => 'required|string|max:255',
-                'content' => 'required|string|max:800'
-            ]
-        );
+//        $request->validate(
+//            [
+//                'title' => 'required|string|max:255',
+//                'content' => 'required|string|max:800'
+//            ]
+//        );
         $post = Post::create($request->all());
         return response()->json($post);
     }
@@ -37,6 +37,11 @@ class PostController extends Controller
 
         $post = Post::find($id);
         $post->update($request->all());
+        return response()->json($post, 200);
+    }
+
+    public function show(string $id){
+        $post = Post::find($id);
         return response()->json($post, 200);
     }
 

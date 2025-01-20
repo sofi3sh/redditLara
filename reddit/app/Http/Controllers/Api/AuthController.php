@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\ApiKey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -26,8 +27,14 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $apiKey = ApiKey::create([
+            'user_id' => $user->id,
+            'api_key' => ApiKey::generateKey(),
+        ]);
+
         return response()->json([
             'user' => $user,
+            'api_key' => $apiKey,
 //            'token' => $user->createToken('auth_token')->plainTextToken,
         ], 201);
     }

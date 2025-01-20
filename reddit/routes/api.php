@@ -8,15 +8,17 @@ use \App\Http\Controllers\Api\UserController;
 use \App\Http\Controllers\Api\VoteController;
 use \App\Http\Controllers\Api\CommentController;
 use \App\Http\Controllers\Api\AuthController;
+use \App\Http\Middleware\ApiKeyMiddleware;
 
 // ✅ Публічні маршрути (без авторизації)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // ✅ Захищені маршрути (потрібен Sanctum токен)
-//Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(ApiKeyMiddleware::class)->group(function () {
     //Post
     Route::get('/post', [PostController::class, 'index']);
+    Route::get('/post/{id}', [PostController::class, 'show']);
     Route::post('/post', [PostController::class, 'store']);
     Route::patch('/post/{id}', [PostController::class, 'update']);
     Route::delete('/post/{id}', [PostController::class, 'destroy']);
@@ -40,7 +42,7 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::delete('/comment/{id}', [CommentController::class, 'destroy']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
-//});
+});
 
 //User
 Route::get('/user', [UserController::class, 'index']);
